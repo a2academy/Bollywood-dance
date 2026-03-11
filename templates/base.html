@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Bollywood DancePro{% endblock %} | Learn Bollywood dance with AI-powered guidance</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --gold-light: #F4E4BC;
+            --gold-dark: #B8860B;
+            --maroon: #722F37;
+            --maroon-dark: #4A1C22;
+            --cream: #FFF8E7;
+            --charcoal: #1A1A1A;
+            --text: #2D2D2D;
+            --text-muted: #6B6B6B;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, var(--cream) 0%, #FFF5E6 50%, #FFEFD5 100%);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background: linear-gradient(90deg, var(--maroon) 0%, var(--maroon-dark) 100%);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(114, 47, 55, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--gold);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo:hover {
+            color: var(--gold-light);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--cream);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+            color: var(--charcoal);
+            box-shadow: 0 2px 10px rgba(212, 175, 55, 0.4);
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.5);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--cream);
+            border: 2px solid var(--gold);
+        }
+
+        .btn-outline:hover {
+            background: var(--gold);
+            color: var(--charcoal);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .messages {
+            margin-bottom: 1.5rem;
+        }
+
+        .message {
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .message.success { background: #d4edda; color: #155724; }
+        .message.error { background: #f8d7da; color: #721c24; }
+        .message.info { background: #d1ecf1; color: #0c5460; }
+
+        footer {
+            background: var(--maroon-dark);
+            color: var(--cream);
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+            text-align: center;
+        }
+
+        footer a {
+            color: var(--gold);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar">
+        <a href="{% url 'home' %}" class="logo">🎬 Bollywood DancePro</a>
+        <div class="nav-links">
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'song_library' %}">Songs</a>
+            <a href="{% url 'choreography_list' %}">Choreographies</a>
+            <a href="{% url 'community_forum' %}">Community</a>
+            <a href="{% url 'performance_schedule' %}">Performances</a>
+            <a href="{% url 'pricing' %}">Pricing</a>
+            <a href="{% url 'about' %}">About</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'dashboard' %}">Dashboard</a>
+                <a href="{% url 'logout' %}" class="btn btn-outline">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn btn-outline">Login</a>
+                <a href="{% url 'register' %}" class="btn btn-gold">Get Started</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <main>
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="message {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="footer-links">
+            <a href="{% url 'about' %}">About</a>
+            <a href="{% url 'pricing' %}">Pricing</a>
+            <a href="{% url 'community_forum' %}">Community</a>
+        </div>
+        <p>&copy; 2025 Bollywood DancePro. Learn Bollywood dance with AI-powered guidance and a community of dancers!</p>
+    </footer>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

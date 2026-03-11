@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Song Library{% endblock %}
+
+{% block content %}
+<section style="margin-bottom: 2rem;">
+    <h1 style="font-family: 'Playfair Display', serif; color: var(--maroon); margin-bottom: 0.5rem;">Song Library</h1>
+    <p style="color: var(--text-muted);">Browse our collection of Bollywood songs. Request new songs and we'll add them!</p>
+</section>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem;">
+    {% for song in songs %}
+    <div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); transition: transform 0.2s;">
+        <div style="aspect-ratio: 1; background: linear-gradient(135deg, var(--gold-light), var(--gold)); display: flex; align-items: center; justify-content: center; font-size: 3rem;">🎵</div>
+        <div style="padding: 1rem;">
+            <h3 style="font-size: 1rem; margin-bottom: 0.25rem;">{{ song.title }}</h3>
+            <p style="font-size: 0.875rem; color: var(--text-muted);">{{ song.artist|default:"Bollywood" }}</p>
+            {% if song.movie %}<p style="font-size: 0.8rem; color: var(--gold-dark);">{{ song.movie }}</p>{% endif %}
+        </div>
+    </div>
+    {% empty %}
+    <p style="grid-column: 1/-1; color: var(--text-muted); padding: 2rem; text-align: center;">No songs in the library yet. Check back soon or request a song!</p>
+    {% endfor %}
+</div>
+{% endblock %}

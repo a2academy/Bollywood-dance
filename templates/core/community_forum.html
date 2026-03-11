@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Community Forum{% endblock %}
+
+{% block content %}
+<section style="margin-bottom: 2rem;">
+    <h1 style="font-family: 'Playfair Display', serif; color: var(--maroon); margin-bottom: 0.5rem;">Community Forum</h1>
+    <p style="color: var(--text-muted);">Connect with fellow dancers, share tips, and discuss choreographies.</p>
+</section>
+
+<div style="display: grid; gap: 1rem;">
+    {% for post in posts %}
+    <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.08); {% if post.is_pinned %}border-left: 4px solid var(--gold);{% endif %}">
+        <div style="display: flex; justify-content: space-between; align-items: start;">
+            <div>
+                <h3 style="font-size: 1.1rem; margin-bottom: 0.25rem;">{{ post.title }}{% if post.is_pinned %} 📌{% endif %}</h3>
+                <p style="font-size: 0.9rem; color: var(--text-muted);">{{ post.description|truncatewords:30 }}</p>
+                <p style="font-size: 0.85rem; color: var(--gold-dark); margin-top: 0.5rem;">by {{ post.creator.username }} • {{ post.view_count }} views</p>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p style="color: var(--text-muted); padding: 2rem; text-align: center;">No forum posts yet. Start the conversation!</p>
+    {% endfor %}
+</div>
+{% endblock %}

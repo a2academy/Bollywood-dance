@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<section style="max-width: 400px; margin: 0 auto; padding: 2rem;">
+    <h1 style="font-family: 'Playfair Display', serif; color: var(--maroon); margin-bottom: 1rem;">Create Account</h1>
+    <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Join Bollywood DancePro and start your dance journey.</p>
+
+    <form method="post" style="display: grid; gap: 1rem;">
+        {% csrf_token %}
+        {% for field in form %}
+        <div>
+            <label for="{{ field.id_for_label }}" style="display: block; font-weight: 500; margin-bottom: 0.25rem;">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+            <p style="color: #721c24; font-size: 0.85rem; margin-top: 0.25rem;">{{ field.errors.0 }}</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-gold" style="width: 100%; padding: 1rem;">Sign Up</button>
+    </form>
+
+    <p style="margin-top: 1.5rem; text-align: center; color: var(--text-muted);">
+        Already have an account? <a href="{% url 'login' %}" style="color: var(--maroon); font-weight: 600;">Log in</a>
+    </p>
+</section>
+
+<style>
+    form input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-family: inherit;
+    }
+    form input:focus {
+        outline: none;
+        border-color: var(--gold);
+    }
+</style>
+{% endblock %}

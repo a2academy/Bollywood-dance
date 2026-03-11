@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<section style="text-align: center; padding: 4rem 2rem; background: linear-gradient(135deg, rgba(212,175,55,0.15) 0%, rgba(114,47,55,0.1) 100%); border-radius: 16px; margin-bottom: 3rem;">
+    <h1 style="font-family: 'Playfair Display', serif; font-size: 3rem; color: var(--maroon); margin-bottom: 1rem;">
+        Learn Bollywood Dance with AI-Powered Guidance
+    </h1>
+    <p style="font-size: 1.25rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 2rem;">
+        Join a dynamic community of dancers. Beginners learn step-by-step from AI tutorials. Advanced dancers create and share choreographies.
+    </p>
+    {% if not user.is_authenticated %}
+    <a href="{% url 'register' %}" class="btn btn-gold" style="font-size: 1.1rem; padding: 1rem 2rem;">Start Your Journey — $9.99/mo</a>
+    {% endif %}
+</section>
+
+<section style="margin-bottom: 3rem;">
+    <h2 style="font-family: 'Playfair Display', serif; color: var(--maroon); margin-bottom: 1.5rem; font-size: 1.75rem;">Featured Songs</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1.5rem;">
+        {% for song in featured_songs %}
+        <div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); transition: transform 0.2s;">
+            <div style="aspect-ratio: 1; background: linear-gradient(135deg, var(--gold-light), var(--gold)); display: flex; align-items: center; justify-content: center; font-size: 3rem;">🎵</div>
+            <div style="padding: 1rem;">
+                <h3 style="font-size: 1rem; margin-bottom: 0.25rem;">{{ song.title }}</h3>
+                <p style="font-size: 0.875rem; color: var(--text-muted);">{{ song.artist|default:"Bollywood" }}</p>
+            </div>
+        </div>
+        {% empty %}
+        <p style="grid-column: 1/-1; color: var(--text-muted);">No songs in the library yet. Check back soon!</p>
+        {% endfor %}
+    </div>
+    <a href="{% url 'song_library' %}" style="display: inline-block; margin-top: 1rem; color: var(--maroon); font-weight: 600;">View all songs →</a>
+</section>
+
+<section style="margin-bottom: 3rem;">
+    <h2 style="font-family: 'Playfair Display', serif; color: var(--maroon); margin-bottom: 1.5rem; font-size: 1.75rem;">Featured Choreographies</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
+        {% for choreo in featured_choreographies %}
+        <a href="{% url 'choreography_detail' choreo.pk %}" style="text-decoration: none; color: inherit;">
+            <div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); transition: transform 0.2s; height: 100%;">
+                <div style="aspect-ratio: 16/9; background: linear-gradient(135deg, var(--maroon), var(--maroon-dark)); display: flex; align-items: center; justify-content: center; font-size: 4rem;">💃</div>
+                <div style="padding: 1rem;">
+                    <h3 style="font-size: 1.1rem; margin-bottom: 0.25rem;">{{ choreo.title }}</h3>
+                    <p style="font-size: 0.875rem; color: var(--text-muted);">{{ choreo.song.title }} • {{ choreo.get_difficulty_display }}</p>
+                    <p style="font-size: 0.8rem; color: var(--gold-dark); margin-top: 0.5rem;">by {{ choreo.creator.username }}</p>
+                </div>
+            </div>
+        </a>
+        {% empty %}
+        <p style="grid-column: 1/-1; color: var(--text-muted);">No choreographies yet. Advanced dancers, start creating!</p>
+        {% endfor %}
+    </div>
+    <a href="{% url 'choreography_list' %}" style="display: inline-block; margin-top: 1rem; color: var(--maroon); font-weight: 600;">Browse all choreographies →</a>
+</section>
+
+<section style="margin-bottom: 3rem;">
+    <h2 style="font-family: 'Playfair Display', serif; color: var(--maroon); margin-bottom: 1.5rem; font-size: 1.75rem;">Upcoming Performances</h2>
+    <div style="display: grid; gap: 1rem;">
+        {% for perf in upcoming_performances %}
+        <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+            <div>
+                <h3 style="font-size: 1.1rem;">{{ perf.title }}</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">{{ perf.scheduled_at|date:"F j, Y \a\t g:i A" }}</p>
+            </div>
+            <span style="background: var(--gold-light); color: var(--gold-dark); padding: 0.4rem 1rem; border-radius: 20px; font-weight: 600; font-size: 0.875rem;">Virtual Event</span>
+        </div>
+        {% empty %}
+        <p style="color: var(--text-muted);">No upcoming performances scheduled. Stay tuned!</p>
+        {% endfor %}
+    </div>
+    <a href="{% url 'performance_schedule' %}" style="display: inline-block; margin-top: 1rem; color: var(--maroon); font-weight: 600;">View full schedule →</a>
+</section>
+
+<section style="background: linear-gradient(135deg, var(--maroon) 0%, var(--maroon-dark) 100%); color: var(--cream); padding: 3rem; border-radius: 16px; text-align: center;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 1rem;">Why Bollywood DancePro?</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-top: 2rem; text-align: center;">
+        <div>
+            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🤖</div>
+            <h3 style="font-size: 1.1rem;">AI Tutorials</h3>
+            <p style="font-size: 0.9rem; opacity: 0.9;">Step-by-step lessons from AI avatar</p>
+        </div>
+        <div>
+            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">📹</div>
+            <h3 style="font-size: 1.1rem;">Interactive Feedback</h3>
+            <p style="font-size: 0.9rem; opacity: 0.9;">Record & get AI performance feedback</p>
+        </div>
+        <div>
+            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🎭</div>
+            <h3 style="font-size: 1.1rem;">Monthly Performances</h3>
+            <p style="font-size: 0.9rem; opacity: 0.9;">Virtual community showcases</p>
+        </div>
+        <div>
+            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🎵</div>
+            <h3 style="font-size: 1.1rem;">Growing Library</h3>
+            <p style="font-size: 0.9rem; opacity: 0.9;">New songs & choreographies weekly</p>
+        </div>
+    </div>
+</section>
+{% endblock %}
