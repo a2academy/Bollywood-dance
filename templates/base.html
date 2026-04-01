@@ -9,15 +9,23 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --gold: #D4AF37;
-            --gold-light: #F4E4BC;
+            --gold: #D4A84B;
+            --gold-light: #F5E6C8;
             --gold-dark: #B8860B;
-            --maroon: #722F37;
-            --maroon-dark: #4A1C22;
-            --cream: #FFF8E7;
+            --teal: #0f766e;
+            --teal-dark: #115e59;
+            --teal-light: #ccfbf1;
+            --lavender: #c4b5fd;
+            --lavender-soft: #ede9fe;
+            --lavender-muted: #a78bfa;
+            --accent-deep: #5b21b6;
+            /* Legacy names — mapped for existing templates */
+            --maroon: #0f766e;
+            --maroon-dark: #115e59;
+            --cream: #f5f3ff;
             --charcoal: #1A1A1A;
             --text: #2D2D2D;
-            --text-muted: #6B6B6B;
+            --text-muted: #64748b;
         }
 
         * {
@@ -28,19 +36,19 @@
 
         body {
             font-family: 'Outfit', sans-serif;
-            background: linear-gradient(135deg, var(--cream) 0%, #FFF5E6 50%, #FFEFD5 100%);
+            background: linear-gradient(160deg, var(--lavender-soft) 0%, #faf8ff 35%, var(--teal-light) 100%);
             color: var(--text);
             min-height: 100vh;
             line-height: 1.6;
         }
 
         .navbar {
-            background: linear-gradient(90deg, var(--maroon) 0%, var(--maroon-dark) 100%);
+            background: linear-gradient(95deg, var(--teal) 0%, var(--accent-deep) 55%, var(--teal-dark) 100%);
             padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 20px rgba(114, 47, 55, 0.3);
+            box-shadow: 0 4px 24px rgba(15, 118, 110, 0.35);
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -68,7 +76,7 @@
         }
 
         .nav-links a {
-            color: var(--cream);
+            color: #f8fafc;
             text-decoration: none;
             font-weight: 500;
             transition: color 0.2s;
@@ -91,19 +99,19 @@
         }
 
         .btn-gold {
-            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+            background: linear-gradient(135deg, var(--gold) 0%, #c9a227 100%);
             color: var(--charcoal);
-            box-shadow: 0 2px 10px rgba(212, 175, 55, 0.4);
+            box-shadow: 0 2px 14px rgba(212, 168, 75, 0.45);
         }
 
         .btn-gold:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.5);
+            box-shadow: 0 4px 18px rgba(212, 168, 75, 0.55);
         }
 
         .btn-outline {
             background: transparent;
-            color: var(--cream);
+            color: #f8fafc;
             border: 2px solid var(--gold);
         }
 
@@ -133,8 +141,8 @@
         .message.info { background: #d1ecf1; color: #0c5460; }
 
         footer {
-            background: var(--maroon-dark);
-            color: var(--cream);
+            background: linear-gradient(180deg, var(--accent-deep) 0%, #1e1b4b 100%);
+            color: var(--lavender-soft);
             padding: 3rem 2rem;
             margin-top: 4rem;
             text-align: center;
@@ -208,7 +216,7 @@
             <a href="{% url 'pricing' %}">Pricing</a>
             <a href="{% url 'community_forum' %}">Community</a>
         </div>
-        <p>&copy; 2025 Bollywood DancePro. Learn Bollywood dance with AI-powered guidance and a community of dancers!</p>
+        <p>&copy; 2026 Bollywood DancePro. Learn Bollywood dance with AI-powered guidance and a community of dancers!</p>
     </footer>
     {% block extra_js %}{% endblock %}
 </body>

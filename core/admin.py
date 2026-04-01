@@ -18,9 +18,23 @@ class UserProfileAdmin(admin.ModelAdmin):
 
 @admin.register(Song)
 class SongAdmin(admin.ModelAdmin):
-    list_display = ['title', 'artist', 'movie', 'is_user_requested', 'created_at']
+    list_display = ['title', 'artist', 'movie', 'youtube_url', 'is_user_requested', 'created_at']
     list_filter = ['is_user_requested']
     search_fields = ['title', 'artist', 'movie']
+    fieldsets = (
+        (None, {'fields': ('title', 'artist', 'movie', 'year')}),
+        (
+            'Song & video links',
+            {
+                'fields': ('youtube_url', 'thumbnail', 'duration_seconds'),
+                'description': (
+                    'Add a YouTube (or other) link for the track or official video. '
+                    'It appears on choreographies that use this song when no other video is set.'
+                ),
+            },
+        ),
+        ('Requests', {'fields': ('is_user_requested', 'requested_by')}),
+    )
 
 
 @admin.register(Choreography)
@@ -28,17 +42,44 @@ class ChoreographyAdmin(admin.ModelAdmin):
     list_display = ['title', 'creator', 'song', 'difficulty', 'is_ai_processed', 'created_at']
     list_filter = ['difficulty', 'is_ai_processed']
     search_fields = ['title', 'creator__username']
+    autocomplete_fields = ['song', 'creator']
+    fieldsets = (
+        (None, {'fields': ('title', 'description', 'song', 'creator', 'difficulty')}),
+        (
+            'Performance video',
+            {
+                'fields': ('video', 'video_url', 'thumbnail', 'duration_seconds'),
+                'description': (
+                    'Upload a file or paste a YouTube/Vimeo URL. '
+                    'Priority: uploaded file, then external link, then AI tutorial, then the song link.'
+                ),
+            },
+        ),
+        ('AI pipeline', {'fields': ('is_ai_processed',)}),
+        ('Engagement', {'fields': ('view_count', 'like_count')}),
+    )
 
 
 class ModuleStepInline(admin.TabularInline):
     model = ModuleStep
     extra = 1
+    fields = ['step_number', 'title', 'description', 'video_clip_url', 'duration_seconds']
 
 
 @admin.register(LearningModule)
 class LearningModuleAdmin(admin.ModelAdmin):
     list_display = ['choreography', 'step_count', 'created_at']
     inlines = [ModuleStepInline]
+    fieldsets = (
+        (None, {'fields': ('choreography', 'step_count')}),
+        (
+            'Tutorial video',
+            {
+                'fields': ('ai_avatar_video', 'transcript'),
+                'description': 'AI avatar or full-tutorial URL (YouTube/Vimeo supported on the site).',
+            },
+        ),
+    )
 
 
 @admin.register(UserProgress)

@@ -1,4 +1,5 @@
 """Bollywood DancePro - Core Views."""
+import json
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout, authenticate
@@ -8,6 +9,7 @@ from .models import (
     Song, Choreography, LearningModule, UserProfile, MonthlyPerformance,
     CommunityForum, Subscription
 )
+from .video_embed import embed_kind, embed_src
 
 
 def home(request):
@@ -42,12 +44,47 @@ def choreography_detail(request, pk):
     """View choreography details and learning module."""
     choreography = get_object_or_404(Choreography.objects.select_related('creator', 'song'), pk=pk)
     learning_module = getattr(choreography, 'learning_module', None)
-    steps = learning_module.steps.all() if learning_module else []
+    steps = list(learning_module.steps.all() if learning_module else [])
+
+    main_media = {'kind': 'none', 'src': None, 'label': ''}
+    if choreography.video:
+        main_media = {'kind': 'video_file', 'src': choreography.video.url, 'label': 'Choreography video'}
+    elif choreography.video_url:
+        src, kind = embed_kind(choreography.video_url)
+        if kind != 'none':
+            main_media = {'kind': kind, 'src': src, 'label': 'Performance video'}
+    elif learning_module and learning_module.ai_avatar_video:
+        src, kind = embed_kind(learning_module.ai_avatar_video)
+        if kind != 'none':
+            main_media = {'kind': kind, 'src': src, 'label': 'AI tutorial'}
+    elif choreography.song.youtube_url:
+        src = embed_src(choreography.song.youtube_url)
+        if src:
+            main_media = {'kind': 'iframe', 'src': src, 'label': 'Song reference'}
+
+    steps_data = []
+    for s in steps:
+        entry = {
+            'id': s.id,
+            'step_number': s.step_number,
+            'title': s.title,
+            'description': s.description or '',
+            'kind': 'none',
+            'src': None,
+        }
+        if s.video_clip_url:
+            src, kind = embed_kind(s.video_clip_url)
+            entry['kind'] = kind
+            entry['src'] = src
+        steps_data.append(entry)
 
     context = {
         'choreography': choreography,
         'learning_module': learning_module,
         'steps': steps,
+        'main_media': main_media,
+        'main_media_json': json.dumps(main_media),
+        'steps_json': json.dumps(steps_data),
     }
     return render(request, 'core/choreography_detail.html', context)
 
